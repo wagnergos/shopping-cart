@@ -1,8 +1,9 @@
 "use server";
 
-import type { Product, Cart, CartItem } from "@/components/cart/types";
+import type { Cart, CartItem } from "@/components/cart/types";
 import { calculateCartTotalsWithPromotion } from "@/components/cart/promotion-utils";
 import { cookies } from "next/headers";
+import { MOCK_PRODUCTS_MAP } from "./constants";
 
 const USER_COOKIE_NAME = "user-is-vip";
 
@@ -13,30 +14,6 @@ let serverCart: Cart = {
   total: 0,
   totalQuantity: 0,
   appliedDiscountType: "none",
-};
-
-const mockProducts: Record<number, Product> = {
-  1: {
-    id: 1,
-    name: "T-shirt",
-    price: 35.99,
-    image:
-      "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&crop=center",
-  },
-  2: {
-    id: 2,
-    name: "Jeans",
-    price: 65.5,
-    image:
-      "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop&crop=center",
-  },
-  3: {
-    id: 3,
-    name: "Dress",
-    price: 80.75,
-    image:
-      "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=400&h=400&fit=crop&crop=center",
-  },
 };
 
 async function getUserFromServerCookies(): Promise<{ isVip: boolean }> {
@@ -84,14 +61,10 @@ export async function updateUserType(isVip: boolean): Promise<string> {
   return `User tier updated to ${isVip ? "VIP" : "Common"}`;
 }
 
-export async function updateCartData(updatedCart: Cart) {
-  serverCart = updatedCart;
-}
-
 export async function addToCart(productId: number): Promise<string> {
   await new Promise((resolve) => setTimeout(resolve, 100));
 
-  const product = mockProducts[productId];
+  const product = MOCK_PRODUCTS_MAP[productId];
   if (!product) {
     return "Product not found";
   }
