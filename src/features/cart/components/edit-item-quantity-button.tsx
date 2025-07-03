@@ -1,9 +1,9 @@
 "use client";
 
 import { useActionState } from "react";
-import { updateItemQuantity } from "./actions";
+import { updateItemQuantity } from "../actions/cart";
 import { useCart } from "./cart-context";
-import { CartItem } from "./types";
+import { CartItem } from "../types/cart";
 
 interface EditItemQuantityButtonProps {
   item: CartItem;

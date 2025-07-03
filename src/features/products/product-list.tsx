@@ -1,4 +1,4 @@
-import { ProductCard } from "./product-card";
+import { ProductCard } from "@/features/products/product-card";
 import { MOCK_PRODUCTS } from "@/lib/constants";
 
 export function ProductList() {

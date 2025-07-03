@@ -6,7 +6,7 @@ export function OpenCart({ quantity }: OpenCartProps) {
   return (
     <div className="relative border border-neutral-200 text-black p-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors cursor-pointer">
       <svg
-        className="w-4 h-4 transition-all ease-in-out hover:scale-110"
+        className="w-4 h-4 transition-transform ease-in-out hover:scale-110"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"

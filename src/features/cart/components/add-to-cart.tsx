@@ -1,9 +1,9 @@
 "use client";
 
 import { useActionState } from "react";
-import { addItem } from "./actions";
+import { addItem } from "../actions/cart";
 import { useCart } from "./cart-context";
-import type { Product } from "./types";
+import { Product } from "@/features/products/types";
 
 interface AddToCartProps {
   product: Product;

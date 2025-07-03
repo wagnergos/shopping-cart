@@ -1,7 +1,7 @@
 "use server";
 
-import type { Cart, CartItem } from "@/components/cart/types";
-import { calculateCartTotalsWithPromotion } from "@/components/cart/promotion-utils";
+import type { Cart, CartItem } from "@/features/cart/types/cart";
+import { calculateCartTotalsWithPromotion } from "@/features/cart/services/discount";
 import { cookies } from "next/headers";
 import { MOCK_PRODUCTS_MAP } from "./constants";
 

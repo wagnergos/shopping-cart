@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/layout/header";
-import { CartProvider } from "@/components/cart/cart-context";
+import { CartProvider } from "@/features/cart/components/cart-context";
 import { UserProvider } from "@/context/user-context";
 import { getCart, getUser } from "@/lib/mock-api";
 import "./globals.css";

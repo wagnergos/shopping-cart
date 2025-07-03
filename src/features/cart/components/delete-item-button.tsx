@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { removeItem } from "./actions";
+import { removeItem } from "../actions/cart";
 import { useCart } from "./cart-context";
 
 interface DeleteItemButtonProps {

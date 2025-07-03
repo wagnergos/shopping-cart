@@ -1,4 +1,4 @@
-import { CartSheet } from "@/components/cart/cart-sheet";
+import { CartSheet } from "@/features/cart/components/cart-sheet";
 
 export async function Header() {
   return (
