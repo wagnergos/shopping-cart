@@ -16,7 +16,7 @@ function ButtonIcon({ type }: { type: "plus" | "minus" }) {
   return (
     <button
       type="submit"
-      className="w-8 h-8 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
+      className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
       aria-label={ariaLabel}
     >
       {type === "plus" ? (

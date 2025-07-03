@@ -16,6 +16,8 @@ export type CartItem = {
 
 export type Cart = {
   items: CartItem[];
+  subtotal: number;
+  discount: number;
   total: number;
   totalQuantity: number;
 };

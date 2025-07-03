@@ -1,7 +1,10 @@
 import type { Product, Cart, CartItem } from "@/components/cart/types";
+import { calculateCartTotalsWithPromotion } from "@/components/cart/promotion-utils";
 
 let serverCart: Cart = {
   items: [],
+  subtotal: 0,
+  discount: 0,
   total: 0,
   totalQuantity: 0,
 };
@@ -17,7 +20,7 @@ const mockProducts: Record<number, Product> = {
   2: {
     id: 2,
     name: "Jeans",
-    price: 89.99,
+    price: 65.5,
     image:
       "https://images.unsplash.com/photo-1542272604-787c3835535d?w=400&h=400&fit=crop&crop=center",
   },
@@ -31,14 +34,11 @@ const mockProducts: Record<number, Product> = {
 };
 
 function calculateCartTotals() {
-  serverCart.totalQuantity = serverCart.items.reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
-  serverCart.total = serverCart.items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+  const totals = calculateCartTotalsWithPromotion(serverCart.items);
+  serverCart.subtotal = totals.subtotal;
+  serverCart.discount = totals.discount;
+  serverCart.total = totals.total;
+  serverCart.totalQuantity = totals.totalQuantity;
 }
 
 export async function getCart(): Promise<Cart> {

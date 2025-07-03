@@ -25,7 +25,7 @@ export function CartSheet() {
 
   return (
     <>
-      <button aria-label="Open cart" onClick={openCart}>
+      <button type="button" aria-label="Open cart" onClick={openCart}>
         <OpenCart quantity={cart?.totalQuantity} />
       </button>
       {isOpen && (
@@ -51,6 +51,7 @@ export function CartSheet() {
                   My Cart
                 </h2>
                 <button
+                  type="button"
                   onClick={closeCart}
                   className="p-2 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
                   aria-label="Close cart"
@@ -115,7 +116,10 @@ export function CartSheet() {
                               <h3 className="text-sm font-medium text-gray-900 truncate">
                                 {item.name}
                               </h3>
-                              <p className="text-sm text-gray-500">
+                              <p
+                                className="text-sm text-gray-500"
+                                aria-label={`Price per unit: ${formatPrice(item.price)}`}
+                              >
                                 {formatPrice(item.price)}
                               </p>
                             </div>
@@ -143,7 +147,10 @@ export function CartSheet() {
                               </span>
                               <EditItemQuantityButton item={item} type="plus" />
                             </div>
-                            <p className="text-sm font-bold text-gray-900">
+                            <p
+                              className="text-sm font-bold text-gray-900"
+                              aria-label={`Subtotal for ${item.name}: ${formatPrice(item.price * item.quantity)}`}
+                            >
                               {formatPrice(item.price * item.quantity)}
                             </p>
                           </div>
@@ -155,15 +162,46 @@ export function CartSheet() {
               </section>
 
               <footer className="border-t border-gray-300 bg-gray-50 px-6 py-4">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-lg font-semibold text-gray-900">
-                    Total:
-                  </span>
-                  <span className="text-lg font-bold text-gray-900">
-                    {formatPrice(total)}
-                  </span>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Subtotal:</span>
+                    <span
+                      className="text-sm text-gray-600"
+                      aria-label={`Subtotal: ${formatPrice(cart?.subtotal || 0)}`}
+                    >
+                      {formatPrice(cart?.subtotal || 0)}
+                    </span>
+                  </div>
+                  {cart?.discount > 0 && (
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-green-600">
+                        Discount applied:
+                      </span>
+                      <span
+                        className="text-sm text-green-600"
+                        aria-label={`Discount: ${formatPrice(cart.discount)}`}
+                      >
+                        -{formatPrice(cart.discount)}
+                      </span>
+                    </div>
+                  )}
+                  <div className="flex justify-between items-center pt-2 border-t border-gray-200">
+                    <span className="text-lg font-semibold text-gray-900">
+                      Total:
+                    </span>
+                    <span
+                      className="text-lg font-bold text-gray-900"
+                      aria-label={`Total: ${formatPrice(total)}`}
+                    >
+                      {formatPrice(total)}
+                    </span>
+                  </div>
                 </div>
-                <button className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium cursor-pointer">
+                <button
+                  type="button"
+                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium cursor-pointer"
+                  aria-label="Go to checkout"
+                >
                   Checkout
                 </button>
               </footer>

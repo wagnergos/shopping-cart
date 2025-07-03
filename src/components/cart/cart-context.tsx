@@ -3,6 +3,7 @@
 import { createContext, useContext, useMemo, use } from "react";
 import { useOptimistic } from "react";
 import type { Cart, CartItem, Product, UpdateType } from "./types";
+import { calculateCartTotalsWithPromotion } from "./promotion-utils";
 
 type CartAction =
   | {
@@ -25,6 +26,8 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 function createEmptyCart(): Cart {
   return {
     items: [],
+    subtotal: 0,
+    discount: 0,
     total: 0,
     totalQuantity: 0,
   };
@@ -59,16 +62,13 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
         }
       }
 
+      const totals = calculateCartTotalsWithPromotion(updatedItems);
       return {
         items: updatedItems,
-        totalQuantity: updatedItems.reduce(
-          (sum, item) => sum + item.quantity,
-          0
-        ),
-        total: updatedItems.reduce(
-          (sum, item) => sum + item.price * item.quantity,
-          0
-        ),
+        subtotal: totals.subtotal,
+        discount: totals.discount,
+        total: totals.total,
+        totalQuantity: totals.totalQuantity,
       };
     }
     case "ADD_ITEM": {
@@ -96,16 +96,13 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
         updatedItems = [...currentCart.items, newItem];
       }
 
+      const totals = calculateCartTotalsWithPromotion(updatedItems);
       return {
         items: updatedItems,
-        totalQuantity: updatedItems.reduce(
-          (sum, item) => sum + item.quantity,
-          0
-        ),
-        total: updatedItems.reduce(
-          (sum, item) => sum + item.price * item.quantity,
-          0
-        ),
+        subtotal: totals.subtotal,
+        discount: totals.discount,
+        total: totals.total,
+        totalQuantity: totals.totalQuantity,
       };
     }
     default:
