@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/layout/header";
+import { CartProvider } from "@/components/cart/cart-context";
+import { getCart } from "@/lib/mock-api";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,13 +25,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cartPromise = getCart();
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        {children}
+        <CartProvider cartPromise={cartPromise}>
+          <Header />
+          {children}
+        </CartProvider>
       </body>
     </html>
   );
