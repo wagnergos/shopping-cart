@@ -4,15 +4,20 @@ import { createContext, useContext, useMemo, use } from "react";
 import { useOptimistic } from "react";
 import type { Cart, CartItem, Product, UpdateType } from "./types";
 import { calculateCartTotalsWithPromotion } from "./promotion-utils";
+import { useUser } from "@/context/user-context";
 
 type CartAction =
   | {
       type: "UPDATE_ITEM";
-      payload: { productId: number; updateType: UpdateType };
+      payload: {
+        productId: number;
+        updateType: UpdateType;
+        userIsVip: boolean;
+      };
     }
   | {
       type: "ADD_ITEM";
-      payload: { product: Product };
+      payload: { product: Product; userIsVip: boolean };
     };
 
 type CartContextType = {
@@ -30,6 +35,7 @@ function createEmptyCart(): Cart {
     discount: 0,
     total: 0,
     totalQuantity: 0,
+    appliedDiscountType: "none",
   };
 }
 
@@ -38,7 +44,7 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
 
   switch (action.type) {
     case "UPDATE_ITEM": {
-      const { productId, updateType } = action.payload;
+      const { productId, updateType, userIsVip } = action.payload;
       let updatedItems = [...currentCart.items];
 
       if (updateType === "delete") {
@@ -62,17 +68,14 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
         }
       }
 
-      const totals = calculateCartTotalsWithPromotion(updatedItems);
+      const totals = calculateCartTotalsWithPromotion(updatedItems, userIsVip);
       return {
+        ...totals,
         items: updatedItems,
-        subtotal: totals.subtotal,
-        discount: totals.discount,
-        total: totals.total,
-        totalQuantity: totals.totalQuantity,
       };
     }
     case "ADD_ITEM": {
-      const { product } = action.payload;
+      const { product, userIsVip } = action.payload;
       const existingItem = currentCart.items.find(
         (item) => item.productId === product.id
       );
@@ -96,13 +99,10 @@ function cartReducer(state: Cart | undefined, action: CartAction): Cart {
         updatedItems = [...currentCart.items, newItem];
       }
 
-      const totals = calculateCartTotalsWithPromotion(updatedItems);
+      const totals = calculateCartTotalsWithPromotion(updatedItems, userIsVip);
       return {
+        ...totals,
         items: updatedItems,
-        subtotal: totals.subtotal,
-        discount: totals.discount,
-        total: totals.total,
-        totalQuantity: totals.totalQuantity,
       };
     }
     default:
@@ -117,6 +117,7 @@ export function CartProvider({
   children: React.ReactNode;
   cartPromise: Promise<Cart>;
 }) {
+  const { user } = useUser();
   const initialCart = use(cartPromise);
 
   const [optimisticCart, updateOptimisticCart] = useOptimistic(
@@ -127,12 +128,15 @@ export function CartProvider({
   const updateCartItem = (productId: number, updateType: UpdateType) => {
     updateOptimisticCart({
       type: "UPDATE_ITEM",
-      payload: { productId, updateType },
+      payload: { productId, updateType, userIsVip: user.isVip },
     });
   };
 
   const addCartItem = (product: Product) => {
-    updateOptimisticCart({ type: "ADD_ITEM", payload: { product } });
+    updateOptimisticCart({
+      type: "ADD_ITEM",
+      payload: { product, userIsVip: user.isVip },
+    });
   };
 
   const value = useMemo(

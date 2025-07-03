@@ -1,5 +1,10 @@
+"use server";
+
 import type { Product, Cart, CartItem } from "@/components/cart/types";
 import { calculateCartTotalsWithPromotion } from "@/components/cart/promotion-utils";
+import { cookies } from "next/headers";
+
+const USER_COOKIE_NAME = "user-is-vip";
 
 let serverCart: Cart = {
   items: [],
@@ -7,6 +12,7 @@ let serverCart: Cart = {
   discount: 0,
   total: 0,
   totalQuantity: 0,
+  appliedDiscountType: "none",
 };
 
 const mockProducts: Record<number, Product> = {
@@ -33,12 +39,31 @@ const mockProducts: Record<number, Product> = {
   },
 };
 
-function calculateCartTotals() {
-  const totals = calculateCartTotalsWithPromotion(serverCart.items);
-  serverCart.subtotal = totals.subtotal;
-  serverCart.discount = totals.discount;
-  serverCart.total = totals.total;
-  serverCart.totalQuantity = totals.totalQuantity;
+async function getUserFromServerCookies(): Promise<{ isVip: boolean }> {
+  try {
+    const cookieStore = await cookies();
+    const userCookie = cookieStore.get(USER_COOKIE_NAME);
+
+    if (userCookie) {
+      return { isVip: userCookie.value === "true" };
+    }
+  } catch (error) {
+    console.warn("Error reading server cookie:", error);
+  }
+
+  return { isVip: false };
+}
+
+async function calculateCartTotals() {
+  const userFromServer = await getUserFromServerCookies();
+  const totals = calculateCartTotalsWithPromotion(
+    serverCart.items,
+    userFromServer.isVip
+  );
+  serverCart = {
+    ...serverCart,
+    ...totals,
+  };
 }
 
 export async function getCart(): Promise<Cart> {
@@ -46,7 +71,20 @@ export async function getCart(): Promise<Cart> {
   return serverCart;
 }
 
-export function updateCartData(updatedCart: Cart): void {
+export async function getUser() {
+  const userFromServer = await getUserFromServerCookies();
+  return userFromServer;
+}
+
+export async function updateUserType(isVip: boolean): Promise<string> {
+  const cookieStore = await cookies();
+  cookieStore.set(USER_COOKIE_NAME, isVip.toString());
+
+  await calculateCartTotals();
+  return `User tier updated to ${isVip ? "VIP" : "Common"}`;
+}
+
+export async function updateCartData(updatedCart: Cart) {
   serverCart = updatedCart;
 }
 
@@ -76,7 +114,7 @@ export async function addToCart(productId: number): Promise<string> {
     serverCart.items.push(newItem);
   }
 
-  calculateCartTotals();
+  await calculateCartTotals();
   return "Product added to cart";
 }
 
@@ -92,7 +130,7 @@ export async function removeFromCart(productId: number): Promise<string> {
   }
 
   serverCart.items.splice(itemIndex, 1);
-  calculateCartTotals();
+  await calculateCartTotals();
   return "Product removed from cart";
 }
 
@@ -119,6 +157,6 @@ export async function updateCart(data: {
   const item = serverCart.items[itemIndex];
   item.quantity = quantity;
 
-  calculateCartTotals();
+  await calculateCartTotals();
   return "Item quantity updated";
 }

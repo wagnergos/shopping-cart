@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useCart } from "./cart-context";
+import { useUser } from "@/context/user-context";
 import { OpenCart } from "./open-cart";
 import { DeleteItemButton } from "./delete-item-button";
 import { EditItemQuantityButton } from "./edit-item-quantity-button";
@@ -16,6 +17,7 @@ function formatPrice(amount: number): string {
 export function CartSheet() {
   const [isOpen, setIsOpen] = useState(false);
   const { cart } = useCart();
+  const { user, toggleUserType } = useUser();
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
@@ -29,12 +31,7 @@ export function CartSheet() {
         <OpenCart quantity={cart?.totalQuantity} />
       </button>
       {isOpen && (
-        <div
-          className="fixed inset-0 z-50"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="cart-title"
-        >
+        <div className="fixed inset-0 z-50" role="dialog" aria-modal="true">
           <div
             className="absolute inset-0 bg-black opacity-50 transition-opacity"
             onClick={closeCart}
@@ -42,39 +39,74 @@ export function CartSheet() {
           />
 
           <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl">
-            <div className="flex flex-col h-full">
-              <header className="flex items-center justify-between px-6 py-4 border-b border-gray-300">
-                <h2
-                  id="cart-title"
-                  className="text-lg font-semibold text-gray-900"
-                >
-                  My Cart
-                </h2>
-                <button
-                  type="button"
-                  onClick={closeCart}
-                  className="p-2 hover:bg-gray-100 rounded-md transition-colors cursor-pointer"
-                  aria-label="Close cart"
-                >
-                  <svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
+            <div className="flex h-full flex-col overflow-y-scroll">
+              <header className="px-6 py-4 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h2
+                    id="cart-title"
+                    className="text-lg font-semibold text-gray-900"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
+                    My Cart
+                  </h2>
+                  <button
+                    type="button"
+                    className="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
+                    onClick={closeCart}
+                    aria-label="Close cart"
+                  >
+                    <svg
+                      className="h-6 w-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                </div>
+
+                <section className="mt-4 bg-gray-50 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-medium text-gray-700">
+                        User Status:
+                      </span>
+                      <span
+                        className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                          user.isVip
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {user.isVip ? "VIP" : "Common"}
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={toggleUserType}
+                      className="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors cursor-pointer"
+                      aria-label={`Switch to ${user.isVip ? "Common" : "VIP"} user status`}
+                    >
+                      {user.isVip ? "Switch to Common" : "Switch to VIP"}
+                    </button>
+                  </div>
+                  {user.isVip && (
+                    <p className="mt-2 text-xs text-gray-600">
+                      VIP users get 15% discount or "Buy 3 Pay 2" promotion
+                      (whichever is better)
+                    </p>
+                  )}
+                </section>
               </header>
 
-              <section className="flex-1 overflow-y-auto px-6 py-4">
-                {items?.length === 0 ? (
+              <section className="flex-1 px-6 py-4 overflow-y-auto">
+                {!items?.length ? (
                   <div
                     className="text-center py-12"
                     role="status"
@@ -175,11 +207,14 @@ export function CartSheet() {
                   {cart?.discount > 0 && (
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-green-600">
-                        Discount applied:
+                        {cart.appliedDiscountType === "vip"
+                          ? "VIP Discount:"
+                          : "Discount applied:"}
                       </span>
                       <span
                         className="text-sm text-green-600"
                         aria-label={`Discount: ${formatPrice(cart.discount)}`}
+                        role="status"
                       >
                         -{formatPrice(cart.discount)}
                       </span>
@@ -192,15 +227,18 @@ export function CartSheet() {
                     <span
                       className="text-lg font-bold text-gray-900"
                       aria-label={`Total: ${formatPrice(total)}`}
+                      role="status"
+                      aria-live="polite"
                     >
                       {formatPrice(total)}
                     </span>
                   </div>
                 </div>
+
                 <button
                   type="button"
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium cursor-pointer"
-                  aria-label="Go to checkout"
+                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium"
+                  disabled={!items?.length}
                 >
                   Checkout
                 </button>

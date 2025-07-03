@@ -20,8 +20,7 @@ export type Cart = {
   discount: number;
   total: number;
   totalQuantity: number;
+  appliedDiscountType: "none" | "buy3pay2" | "vip";
 };
-
-export type UserType = "common" | "vip";
 
 export type UpdateType = "plus" | "minus" | "delete";
