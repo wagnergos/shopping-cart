@@ -3,7 +3,7 @@
 import { useActionState } from "react";
 import { addItem } from "../actions/cart";
 import { useCart } from "./cart-context";
-import { Product } from "@/features/products/types";
+import { Product } from "@/types/product";
 
 interface AddToCartProps {
   product: Product;

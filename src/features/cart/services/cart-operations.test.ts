@@ -1,6 +1,6 @@
 import { handleAddCartItem, handleUpdateCartItem } from "./cart-operations";
 import type { Cart } from "../types/cart";
-import type { Product } from "@/features/products/types";
+import type { Product } from "@/types/product";
 import { PRODUCT_PRICES, PRODUCT_NAMES } from "../testing/fixtures/products";
 import { DISCOUNT_RULES } from "../testing/fixtures/business-constants";
 import { aCartItem } from "../testing/helpers/cart-item-builder";

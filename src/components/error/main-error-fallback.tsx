@@ -1,7 +1,5 @@
 "use client";
 
-import React from "react";
-
 interface MainErrorFallbackProps {
   error: Error;
   resetErrorBoundary: () => void;

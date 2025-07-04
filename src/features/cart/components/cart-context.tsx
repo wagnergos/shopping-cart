@@ -3,7 +3,7 @@
 import { createContext, useContext, useMemo, use, useCallback } from "react";
 import { useOptimistic } from "react";
 import type { Cart, UpdateType } from "../types/cart";
-import { Product } from "@/features/products/types";
+import { Product } from "@/types/product";
 import { useUser } from "@/context/user-context";
 import { createEmptyCart } from "../utils/cart-operations";
 import {

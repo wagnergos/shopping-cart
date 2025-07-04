@@ -1,5 +1,5 @@
 import type { Cart, CartItem, UpdateType } from "../types/cart";
-import { Product } from "@/features/products/types";
+import { Product } from "@/types/product";
 import { calculateCartTotalsWithPromotion } from "./discount";
 import { createEmptyCart, updateItemQuantity } from "../utils/cart-operations";
 
