@@ -6,6 +6,7 @@ const createJestConfig = nextJest({
 });
 
 const config: Config = {
+  preset: "ts-jest",
   coverageProvider: "v8",
   testEnvironment: "jsdom",
   moduleNameMapper: {
@@ -22,6 +23,15 @@ const config: Config = {
     "!src/lib/mock-api.ts",
   ],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  transform: {
+    "^.+\\.(ts|tsx)$": [
+      "ts-jest",
+      {
+        isolatedModules: true,
+        tsconfig: "tsconfig.test.json",
+      },
+    ],
+  },
 };
 
 export default createJestConfig(config);

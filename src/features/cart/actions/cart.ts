@@ -9,7 +9,7 @@ export async function addItem(prevState: any, productId: number) {
   try {
     await addToCart(productId);
     revalidatePath("/");
-  } catch (e) {
+  } catch {
     return "Error adding item to cart";
   }
 }
@@ -20,7 +20,7 @@ export async function removeItem(prevState: any, productId: number) {
   try {
     await removeFromCart(productId);
     revalidatePath("/");
-  } catch (e) {
+  } catch {
     return "Error removing item from cart";
   }
 }
@@ -37,7 +37,7 @@ export async function updateItemQuantity(
   try {
     await updateCart(payload);
     revalidatePath("/");
-  } catch (e) {
+  } catch {
     return "Error updating item quantity";
   }
 }
