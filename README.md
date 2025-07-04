@@ -2,6 +2,10 @@
 
 A modern shopping cart application built with Next.js, React, and TypeScript, following clean architecture principles and feature-driven development.
 
+Feel free to play around with the code using StackBlitz.
+
+[![Open in StackBlitz](https://camo.githubusercontent.com/e9392ad1a0cb081a5be23067cfb953616abc12f4e260f581a302e020c41d41c0/68747470733a2f2f646576656c6f7065722e737461636b626c69747a2e636f6d2f696d672f6f70656e5f696e5f737461636b626c69747a2e737667)](https://stackblitz.com/github/wagnergos/shopping-cart)
+
 ---
 
 ## 📋 Project Overview
