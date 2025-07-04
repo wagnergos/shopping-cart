@@ -4,7 +4,10 @@ import { Product } from "@/features/products/types";
 
 export function ProductCard({ product }: { product: Product }) {
   return (
-    <li className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+    <li 
+      className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+      data-testid="product-card"
+    >
       <div className="relative h-64">
         <Image
           src={product.image}

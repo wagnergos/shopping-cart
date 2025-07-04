@@ -25,6 +25,7 @@ export function AddToCart({ product }: AddToCartProps) {
         type="submit"
         className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors font-medium cursor-pointer"
         aria-label={`Add ${product.name} to cart for $${product.price}`}
+        data-testid="add-to-cart"
       >
         Add to Cart
       </button>

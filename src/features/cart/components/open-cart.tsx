@@ -4,7 +4,10 @@ interface OpenCartProps {
 
 export function OpenCart({ quantity }: OpenCartProps) {
   return (
-    <div className="relative border border-neutral-200 text-black p-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors cursor-pointer">
+    <div 
+      className="relative border border-neutral-200 text-black p-2 rounded-md focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors cursor-pointer"
+      data-testid="cart-button"
+    >
       <svg
         className="w-4 h-4 transition-transform ease-in-out hover:scale-110"
         fill="none"
@@ -20,7 +23,10 @@ export function OpenCart({ quantity }: OpenCartProps) {
         />
       </svg>
       {!!quantity && (
-        <span className="absolute right-0 top-0 -mr-2 -mt-2 h-4 w-4 rounded-sm bg-blue-600 text-[11px] font-medium text-white">
+        <span 
+          className="absolute right-0 top-0 -mr-2 -mt-2 h-4 w-4 rounded-sm bg-blue-600 text-[11px] font-medium text-white"
+          data-testid="cart-counter"
+        >
           {quantity}
         </span>
       )}

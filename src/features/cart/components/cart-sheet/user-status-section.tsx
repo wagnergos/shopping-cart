@@ -16,6 +16,7 @@ export function UserStatusSection() {
                 ? "bg-yellow-100 text-yellow-800"
                 : "bg-gray-100 text-gray-800"
             }`}
+            data-testid="user-type"
           >
             {user.isVip ? "VIP" : "Common"}
           </span>
@@ -25,6 +26,7 @@ export function UserStatusSection() {
           onClick={toggleUserType}
           className="px-3 py-1 text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors cursor-pointer"
           aria-label={`Switch to ${user.isVip ? "Common" : "VIP"} user status`}
+          data-testid="toggle-user-type"
         >
           {user.isVip ? "Switch to Common" : "Switch to VIP"}
         </button>

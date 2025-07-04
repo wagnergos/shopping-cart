@@ -1,5 +1,5 @@
 import type { CartItem } from "@/features/cart/types/cart";
-import { getDiscount, calculateVipDiscount } from "../utils/discount";
+import { getCheapestItemPrice, calculateVipDiscount } from "../utils/discount";
 
 export function calculateCartTotalsWithPromotion(
   items: CartItem[],
@@ -14,7 +14,7 @@ export function calculateCartTotalsWithPromotion(
   let discount = 0;
   let appliedDiscountType: "none" | "buy3pay2" | "vip" = "none";
 
-  const buy3Pay2Discount = totalQuantity >= 3 ? getDiscount(items) : 0;
+  const buy3Pay2Discount = totalQuantity >= 3 ? getCheapestItemPrice(items) : 0;
   discount = buy3Pay2Discount;
 
   if (buy3Pay2Discount > 0) {
