@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, use } from "react";
+import { createContext, useContext, useMemo, use, useCallback } from "react";
 import { useOptimistic } from "react";
 import type { Cart, UpdateType } from "../types/cart";
 import { Product } from "@/features/products/types";
@@ -50,19 +50,19 @@ export function CartProvider({
     cartReducer
   );
 
-  const updateCartItem = (productId: number, updateType: UpdateType) => {
+  const updateCartItem = useCallback((productId: number, updateType: UpdateType) => {
     updateOptimisticCart({
       type: "UPDATE_ITEM",
       payload: { productId, updateType, userIsVip: user.isVip },
     });
-  };
+  }, [updateOptimisticCart, user.isVip]);
 
-  const addCartItem = (product: Product) => {
+  const addCartItem = useCallback((product: Product) => {
     updateOptimisticCart({
       type: "ADD_ITEM",
       payload: { product, userIsVip: user.isVip },
     });
-  };
+  }, [updateOptimisticCart, user.isVip]);
 
   const value = useMemo(
     () => ({
