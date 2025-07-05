@@ -1,0 +1,4 @@
+export const DISCOUNT_RULES = {
+  VIP_DISCOUNT_RATE: 0.15,
+  BUY3PAY2_MIN_QUANTITY: 3,
+} as const;

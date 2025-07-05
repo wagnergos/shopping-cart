@@ -17,21 +17,26 @@ export function CartSummary({ cart }: CartSummaryProps) {
           <span
             className="text-sm text-gray-600"
             aria-label={`Subtotal: ${formatPrice(cart?.subtotal || 0)}`}
+            data-testid="cart-subtotal"
           >
             {formatPrice(cart?.subtotal || 0)}
           </span>
         </div>
         {cart?.discount && cart.discount > 0 && (
           <div className="flex justify-between items-center">
-            <span className="text-sm text-green-600">
+            <span 
+              className="text-sm text-green-600"
+              data-testid="discount-info"
+            >
               {cart.appliedDiscountType === "vip"
-                ? "VIP Discount:"
-                : "Discount applied:"}
+                ? "VIP Discount"
+                : "Buy 3 Pay 2"}
             </span>
             <span
               className="text-sm text-green-600"
               aria-label={`Discount: ${formatPrice(cart.discount)}`}
               role="status"
+              data-testid="cart-discount"
             >
               -{formatPrice(cart.discount)}
             </span>
@@ -44,6 +49,7 @@ export function CartSummary({ cart }: CartSummaryProps) {
             aria-label={`Total: ${formatPrice(total)}`}
             role="status"
             aria-live="polite"
+            data-testid="cart-total"
           >
             {formatPrice(total)}
           </span>

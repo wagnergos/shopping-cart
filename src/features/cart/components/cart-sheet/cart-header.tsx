@@ -16,6 +16,7 @@ export function CartHeader({ onClose }: CartHeaderProps) {
           className="text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 cursor-pointer"
           onClick={onClose}
           aria-label="Close cart"
+          data-testid="close-cart"
         >
           <svg
             className="h-6 w-6"

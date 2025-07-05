@@ -13,11 +13,13 @@ interface EditItemQuantityButtonProps {
 function ButtonIcon({ type }: { type: "plus" | "minus" }) {
   const ariaLabel =
     type === "plus" ? "Increase item quantity" : "Decrease item quantity";
+  const testId = type === "minus" ? "decrease-quantity" : "increase-quantity";
   return (
     <button
       type="submit"
       className="w-6 h-6 flex items-center justify-center border border-gray-300 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
       aria-label={ariaLabel}
+      data-testid={testId}
     >
       {type === "plus" ? (
         <svg
