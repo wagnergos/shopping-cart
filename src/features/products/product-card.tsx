@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { AddToCart } from "@/features/cart/components/add-to-cart";
-import { Product } from "@/features/products/types";
+import { Product } from "@/types/product";
 
 export function ProductCard({ product }: { product: Product }) {
   return (

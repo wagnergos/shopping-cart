@@ -1,5 +1,5 @@
 import type { UpdateType } from "./cart";
-import { Product } from "@/features/products/types";
+import { Product } from "@/types/product";
 
 export type CartAction =
   | {
